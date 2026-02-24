@@ -2,6 +2,7 @@ package com.nutriflow.services;
 
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.mail.SimpleMailMessage;
 import org.springframework.mail.javamail.JavaMailSender;
 import org.springframework.scheduling.annotation.Async;
@@ -15,13 +16,16 @@ public class EmailService {
 
     private final JavaMailSender mailSender;
 
+    @Value("${spring.mail.from}")
+    private String fromEmail;
+
     @Async
     public void sendVerificationEmail(String to, String otp) {
         log.info("Email sending process started. Recipient: {}", to);
         try {
             SimpleMailMessage message = new SimpleMailMessage();
             message.setTo(to);
-            message.setFrom("NutriFlow <noreply@nutriflow.com>");
+            message.setFrom("NutriFlow <" + fromEmail + ">");
             message.setSubject("NutriFlow - Verification Code");
             message.setText("Hello!\n\n" +
                     "Thank you for joining NutriFlow. " +
@@ -41,7 +45,7 @@ public class EmailService {
         try {
             SimpleMailMessage message = new SimpleMailMessage();
             message.setTo(to);
-            message.setFrom("NutriFlow <noreply@nutriflow.com>");
+            message.setFrom("NutriFlow <" + fromEmail + ">");
             message.setSubject("NutriFlow - Password Reset Code");
             message.setText("Hello!\n\n" +
                     "We received a request to reset your NutriFlow account password.\n" +
