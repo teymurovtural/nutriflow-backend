@@ -240,4 +240,19 @@ public class DietitianMapper {
                 .goal(user.getHealthProfile() != null ? user.getHealthProfile().getGoal() : null)
                 .build();
     }
+
+    public MenuBatchResponse toMenuBatchResponse(MenuBatchEntity batch) {
+        if (batch == null) return null;
+
+        return MenuBatchResponse.builder()
+                .batchId(batch.getId())
+                .userId(batch.getMenu().getUser().getId())
+                .year(batch.getMenu().getYear())
+                .month(batch.getMenu().getMonth())
+                .status(batch.getStatus().name())
+                .dietaryNotes(batch.getMenu().getDietaryNotes())
+                .createdAt(batch.getCreatedAt() != null ? batch.getCreatedAt().toString() : null)
+                .build();
+    }
+
 }

@@ -10,7 +10,6 @@ import java.util.List;
 public interface DietitianService {
 
     List<UserSummaryResponse> getMyAssignedUsers(String dietitianEmail);
-    void createMonthlyMenu(String dietitianEmail, MenuCreateRequest request);
     String submitMenu(Long batchId);
     MenuRejectionDetailResponse getMenuRejectionReason(Long batchId);
     String updateProfile(String currentEmail, DietitianUpdateRequest request);
@@ -21,7 +20,8 @@ public interface DietitianService {
     List<UserSummaryResponse> searchMyPatients(String dietitianEmail, String query);
     MedicalFileDetailResponse getAnalysisFileUrl(Long fileId);
     BatchResponse getBatchDetails(Long batchId);
-    void updateMenu(Long batchId, MenuCreateRequest request);
+    MenuBatchResponse createMonthlyMenu(String dietitianEmail, MenuCreateRequest request);
+    MenuBatchResponse updateMenu(Long batchId, MenuCreateRequest request);
     MenuResponse getMonthlyMenu(Long userId, Integer year, Integer month);
     String deleteMenuContent(Long batchId, Integer day, MealType mealType);
 

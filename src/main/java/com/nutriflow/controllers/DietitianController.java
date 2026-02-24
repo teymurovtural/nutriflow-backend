@@ -31,19 +31,14 @@ public class DietitianController {
         return ResponseEntity.ok(dietitianService.getMyAssignedUsers(email));
     }
 
-    /**
-     * @Valid must be used when creating a new menu.
-     * Meal lists and days inside MenuCreateRequest are validated.
-     */
     @PostMapping("/create-menu")
-    public ResponseEntity<String> createMenu(
+    public ResponseEntity<MenuBatchResponse> createMenu(
             Authentication authentication,
-            @Valid @RequestBody MenuCreateRequest request) { // @Valid added
+            @Valid @RequestBody MenuCreateRequest request) {
 
         String email = authentication.getName();
-        dietitianService.createMonthlyMenu(email, request);
-
-        return ResponseEntity.ok("Menu created successfully.");
+        MenuBatchResponse response = dietitianService.createMonthlyMenu(email, request);
+        return ResponseEntity.ok(response);
     }
 
     /**
@@ -119,15 +114,13 @@ public class DietitianController {
         return ResponseEntity.ok(dietitianService.getBatchDetails(batchId));
     }
 
-    /**
-     * New data validity must be checked when editing an existing menu.
-     */
     @PutMapping("/batch/{batchId}/update")
-    public ResponseEntity<String> updateMenu(
+    public ResponseEntity<MenuBatchResponse> updateMenu(
             @PathVariable Long batchId,
-            @Valid @RequestBody MenuCreateRequest request) { // @Valid added
-        dietitianService.updateMenu(batchId, request);
-        return ResponseEntity.ok("Menu updated successfully and ready for resubmission.");
+            @Valid @RequestBody MenuCreateRequest request) {
+
+        MenuBatchResponse response = dietitianService.updateMenu(batchId, request);
+        return ResponseEntity.ok(response);
     }
 
     @DeleteMapping("/batch/{batchId}/delete-content")

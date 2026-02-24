@@ -61,27 +61,25 @@ public class DietitianServiceImpl implements DietitianService {
 
     @Override
     @Transactional
-    public void createMonthlyMenu(String dietitianEmail, MenuCreateRequest request) {
+    public MenuBatchResponse createMonthlyMenu(String dietitianEmail, MenuCreateRequest request) {
         log.info("Creating monthly menu: email={}, userId={}, year={}, month={}",
                 dietitianEmail, request.getUserId(), request.getYear(), request.getMonth());
 
         DietitianEntity dietitian = entityFinder.findDietitianByEmail(dietitianEmail);
         UserEntity user = entityFinder.findUserById(request.getUserId());
 
-        // Find or create draft batch via Helper
         MenuBatchEntity draftBatch = menuBatchHelper.getOrCreateDraftBatch(
                 user, dietitian, request.getYear(), request.getMonth());
 
-        // Write dietary notes to menu
         if (request.getDietaryNotes() != null) {
             draftBatch.getMenu().setDietaryNotes(request.getDietaryNotes());
         }
 
-        // Add or update items via Helper
         menuBatchHelper.addOrUpdateItems(draftBatch, request.getItems());
-
         menuRepository.save(draftBatch.getMenu());
+
         log.info("Menu created/updated successfully");
+        return dietitianMapper.toMenuBatchResponse(draftBatch);
     }
 
     @Override
@@ -284,20 +282,19 @@ public class DietitianServiceImpl implements DietitianService {
 
     @Override
     @Transactional
-    public void updateMenu(Long batchId, MenuCreateRequest request) {
-        log.info("Updating rejected batch: batchId={}", batchId);
+    public MenuBatchResponse updateMenu(Long batchId, MenuCreateRequest request) {
+        log.info("Updating batch: batchId={}", batchId);
 
         MenuBatchEntity batch = entityFinder.findBatchById(batchId);
 
-        // dietaryNotes update et
         if (request.getDietaryNotes() != null) {
             batch.getMenu().setDietaryNotes(request.getDietaryNotes());
             menuRepository.save(batch.getMenu());
         }
 
-        // Update via Helper
         menuBatchHelper.updateRejectedBatch(batch, request.getItems());
 
         log.info("Batch updated successfully");
+        return dietitianMapper.toMenuBatchResponse(batch);
     }
 }
