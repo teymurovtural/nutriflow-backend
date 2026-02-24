@@ -67,9 +67,8 @@ public class SecurityConfig {
                 "http://localhost:3000",
                 "http://localhost:5173",
                 "http://localhost:4200",
-                "http://localhost:3001"
-                // Add your frontend URL in production
-                // "https://yourdomain.com"
+                "http://localhost:3001",
+                "http://46.101.254.176"
         ));
 
         // Allowed HTTP methods
