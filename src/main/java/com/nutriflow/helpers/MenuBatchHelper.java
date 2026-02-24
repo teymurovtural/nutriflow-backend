@@ -92,6 +92,7 @@ public class MenuBatchHelper {
                             .status(MenuStatus.DRAFT)
                             .items(new ArrayList<>())
                             .build();
+                    MenuBatchEntity savedBatch = menuBatchRepository.save(newBatch);
                     menu.getBatches().add(newBatch);
                     return newBatch;
                 });
