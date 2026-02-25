@@ -49,7 +49,7 @@ public class EmailService {
         sendEmail(to, subject, body);
     }
 
-    private void sendEmail(String to, String subject, String body) {
+    public void sendEmail(String to, String subject, String body) {
         try {
             Email from = new Email(fromEmail, fromName);
             Email toEmail = new Email(to);
